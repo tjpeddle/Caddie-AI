@@ -2,7 +2,9 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Course, Round, Hole, HolePerformance, PlayerProfile } from '../types.ts';
 
-const API_KEY = process.env.API_KEY;
+// Safely access the API key. In a pure browser environment without a build step,
+// `process` will be undefined. This check prevents the app from crashing.
+const API_KEY = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : undefined;
 
 // Initialize ai as null. We will only create an instance if the API key exists.
 let ai: GoogleGenAI | null = null;
