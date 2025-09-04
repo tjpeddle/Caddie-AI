@@ -4,11 +4,15 @@ import { Course, Round, Hole, HolePerformance, PlayerProfile } from '../types.ts
 
 const API_KEY = process.env.API_KEY;
 
-if (!API_KEY) {
+// Initialize ai as null. We will only create an instance if the API key exists.
+let ai: GoogleGenAI | null = null;
+
+if (API_KEY) {
+  ai = new GoogleGenAI({ apiKey: API_KEY });
+} else {
+  // This warning is helpful for developers.
   console.warn("API_KEY environment variable not set. Gemini API calls will fail.");
 }
-
-const ai = new GoogleGenAI({ apiKey: API_KEY! });
 
 const responseSchema = {
     type: Type.OBJECT,
@@ -93,8 +97,9 @@ const buildSystemPrompt = (course: Course, currentHole: Hole, round: Round, play
 };
 
 export const getJpConversationalResponse = async (course: Course, currentHole: Hole, round: Round, playerProfile: PlayerProfile): Promise<any> => {
-     if (!API_KEY) {
-      return { conversationalResponse: "JP is currently offline. Please ensure the API key is configured.", extractedData: null, audioCue: 'none' };
+     // Check if the 'ai' instance was successfully created.
+     if (!ai) {
+      return { conversationalResponse: "JP is currently offline. The AI Caddie is not configured correctly. Please ensure the API key is set in the environment variables.", extractedData: null, audioCue: 'none' };
     }
     
     const systemInstruction = buildSystemPrompt(course, currentHole, round, playerProfile);
