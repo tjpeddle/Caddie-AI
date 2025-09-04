@@ -1,0 +1,7 @@
+{
+  "name": "JP - AI Golf Caddie",
+  "description": "JP is a professional AI golf caddie with persistent memory across all rounds. It maintains comprehensive historical data for each course and continuously learns from every round played to provide expert advice.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
